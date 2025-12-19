@@ -8,6 +8,6 @@ Docker + C++ + PostgreSQL based system.
 - feature/*: features
 
 ## Team
-- Student 1: Project Manager
-- Student 2: Docker & DevOps
-- Student 3: C++ Developer
+- İrfan Karaşoğlu: Project Manager
+- Veysel Özaslan: Docker & DevOps
+- Berkay Erdoğan: C++ Developer
