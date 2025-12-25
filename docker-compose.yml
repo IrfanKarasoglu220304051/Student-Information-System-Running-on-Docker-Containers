@@ -1,0 +1,28 @@
+services:
+  db:
+    image: postgres:latest
+    container_name: sis-db
+    env_file:
+      - .env
+    volumes:
+      - sis_pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sis-app
+    depends_on:
+      - db
+    env_file:
+      - .env
+    environment:
+      - APP_DB_HOST=db
+      - APP_DB_PORT=5432
+    stdin_open: true
+    tty: true
+
+volumes:
+  sis_pgdata:
