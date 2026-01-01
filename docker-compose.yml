@@ -2,9 +2,7 @@ version: "3.9"
 
 services:
   db:
-    build:
-      context: .
-      dockerfile: Dockerfile.db
+    image: veyselozaslan/sis-project-postgres:latest
     container_name: postgres_container
     environment:
       POSTGRES_DB: studentdb
@@ -18,9 +16,7 @@ services:
       - sis_network
 
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: veyselozaslan/sis-project-app:latest
     container_name: cpp_app_container
     depends_on:
       - db
@@ -37,5 +33,4 @@ volumes:
 
 networks:
   sis_network:
-
 
