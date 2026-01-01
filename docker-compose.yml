@@ -1,19 +1,38 @@
-version: "3.8"
+version: "3.9"
 
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: cpp_app
-    depends_on:
-      - db
-
   db:
     build:
       context: .
       dockerfile: Dockerfile.db
-    container_name: postgres_db
     ports:
       - "5432:5432"
+    environment:
+      POSTGRES_DB: studentdb
+      POSTGRES_USER: student
+      POSTGRES_PASSWORD: student123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - sis_network
 
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_NAME: studentdb
+      DB_USER: student
+      DB_PASSWORD: student123
+      DB_PORT: "5432"
+    networks:
+      - sis_network
+
+volumes:
+  postgres_data:
+
+networks:
+  sis_network:
