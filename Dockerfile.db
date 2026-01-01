@@ -1,7 +1,2 @@
-FROM postgres:latest
-
-ENV POSTGRES_DB=studentdb
-ENV POSTGRES_USER=studentuser
-ENV POSTGRES_PASSWORD=studentpass
-
+FROM postgres:14
 EXPOSE 5432
