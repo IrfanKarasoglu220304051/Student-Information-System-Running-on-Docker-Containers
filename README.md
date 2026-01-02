@@ -15,46 +15,49 @@ Docker + C++ + PostgreSQL based system.
 ## Veritabanı Kurulumu (Database Initialization)
 
 ### Ön Gereksinimler
-- Docker ve Docker Compose yüklü olmalı
-- PostgreSQL container'ı çalışıyor olmalı
+- Docker ve Docker Compose (v1 veya v2) yüklü olmalı
+- `docker-compose.yml` içindeki `db` servisi Postgres çalıştıracak şekilde yapılandırılmış olmalı
 
-### Adımlar
+### Otomatik Uygulama (yeni kurulum / önerilen)
+Bu repo `schema.sql` dosyasını `db` servisine mount edecek şekilde ayarlanmıştır; init script sadece veritabanı **ilk kez** oluşturulurken çalışır.
 
-1. **Docker Container'ları Başlat:**
+1. Varolan container ve volume'leri kaldır (böylece init script çalışacaktır):
    ```bash
-   docker-compose up -d
+   # Docker Compose v2
+   docker compose down -v
+
+   # Eğer sisteminizde v1 yüklüyse
+   # docker-compose down -v
    ```
 
-2. **PostgreSQL Container'ına Bağlan:**
+2. Container'ları yeniden başlatın:
    ```bash
-   docker exec -it postgres_db psql -U postgres
+   docker compose up -d
+   # veya docker-compose up -d
    ```
 
-3. **Veritabanını Oluştur (eğer yoksa):**
-   ```sql
-   CREATE DATABASE studentdb;
-   \c studentdb
-   ```
+> Not: `docker-entrypoint-initdb.d/schema.sql` içeriği yalnızca volume boşken çalıştırılır; eğer daha önce oluşturulmuş bir volume varsa `down -v` ile silinmelidir.
 
-4. **Schema'yı Yükle:**
-   ```bash
-   # Container içinden
-   docker exec -i postgres_db psql -U postgres -d studentdb < schema.sql
-   
-   # VEYA container içinde psql kullanarak
-   docker exec -it postgres_db psql -U postgres -d studentdb
-   ```
-   Sonra `schema.sql` dosyasının içeriğini kopyalayıp yapıştırın.
+### Manuel Uygulama (mevcut veritabanı için)
+Eğer volume'ü silmek istemiyorsanız veya schema'yı elle uygulamak istiyorsanız:
+```bash
+# Dockerfile.db'de ayarlı POSTGRES_USER/POSTGRES_DB değerlerini kontrol edin (örnek: student / studentdb)
+docker exec -i postgres_db psql -U student -d studentdb < schema.sql
+```
 
-5. **Ortam Değişkenlerini Ayarla:**
-   Uygulama aşağıdaki environment variable'ları kullanır:
-   - `DB_HOST`: Veritabanı host adresi (varsayılan: "db")
-   - `DB_PORT`: Veritabanı portu (varsayılan: "5432")
-   - `DB_NAME`: Veritabanı adı (varsayılan: "studentdb")
-   - `DB_USER`: Kullanıcı adı (varsayılan: "postgres")
-   - `DB_PASSWORD`: Şifre (varsayılan: "example")
+### Doğrulama
+- Container loglarını kontrol edin:
+  ```bash
+  docker logs postgres_db --tail 200
+  ```
+- Veritabanındaki tabloları listeleyin:
+  ```bash
+  docker exec -i postgres_db psql -U student -d studentdb -c "\dt"
+  ```
 
-   Docker Compose ile çalışırken bu değişkenler `docker-compose.yml` içinde tanımlanabilir.
+### Ortam Değişkenleri
+- `DB_HOST` (varsayılan: `db`), `DB_PORT` (varsayılan: `5432`), `DB_NAME` (varsayılan: `studentdb`), `DB_USER`, `DB_PASSWORD`
+- Ayarlar `docker-compose.yml` veya `Dockerfile.db` içinde kontrol edilebilir.
 
 ### Schema Yapısı
 
