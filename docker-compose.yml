@@ -14,6 +14,8 @@ services:
       context: .
       dockerfile: Dockerfile.db
     container_name: postgres_db
+    volumes:
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
     ports:
       - "5432:5432"
 
