@@ -3,7 +3,7 @@
 
 #include <string>
 
-class User {
+class Student{
 private:
     int id;
     std::string studentNumber;
