@@ -41,3 +41,13 @@
 *.dwo
 build/
 .env
+
+# IDE files
+.vscode/
+.vs/
+OBS_App
+
+# Build directories
+buildFile/
+build/
+out/

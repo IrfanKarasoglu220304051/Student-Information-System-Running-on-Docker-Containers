@@ -31,8 +31,23 @@ services:
     networks:
       - sis_network
 
-volumes:
-  postgres_data:
+services:
+  db:
+    build:
+      context: .
+      dockerfile: Dockerfile.db
+    environment:
+      POSTGRES_DB: studentdb
+      POSTGRES_USER: student
+      POSTGRES_PASSWORD: student123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+    networks:
+      - sis_network
+
 
 networks:
   sis_network:
