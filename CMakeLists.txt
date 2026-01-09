@@ -19,6 +19,7 @@ include_directories(include)
 set(SOURCES
     src/main.cpp
     src/DatabaseManager.cpp
+    src/Student.cpp
 )
 
 # Çalıştırılabilir Dosyayı Oluştur (Executable)
@@ -33,7 +34,20 @@ enable_testing()
 # GoogleTest paketini bul (Eğer yüklüyse)
 find_package(GTest QUIET)
 if(GTest_FOUND)
-    add_executable(UnitTests tests/test_db.cpp src/DatabaseManager.cpp)
-    target_link_libraries(UnitTests PRIVATE GTest::GTest GTest::Main pqxx::pqxx)
-    add_test(NAME AllTests COMMAND UnitTests)
+    # Unit Tests - Student sınıfı testleri
+    add_executable(UnitTests_Student test/test_student.cpp src/Student.cpp)
+    target_link_libraries(UnitTests_Student PRIVATE GTest::GTest GTest::Main)
+    add_test(NAME StudentTests COMMAND UnitTests_Student)
+    
+    # Integration Tests - DatabaseManager testleri
+    add_executable(UnitTests_Database test/test_database.cpp src/DatabaseManager.cpp src/Student.cpp)
+    target_link_libraries(UnitTests_Database PRIVATE GTest::GTest GTest::Main pqxx::pqxx PostgreSQL::PostgreSQL)
+    add_test(NAME DatabaseTests COMMAND UnitTests_Database)
+    
+    # Tüm testleri çalıştırmak için
+    add_custom_target(run_all_tests
+        COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
+        DEPENDS UnitTests_Student UnitTests_Database
+        COMMENT "Running all tests"
+    )
 endif()

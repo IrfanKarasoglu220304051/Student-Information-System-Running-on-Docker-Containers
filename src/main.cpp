@@ -3,6 +3,7 @@
 #include <string>
 #include <limits>
 #include "DatabaseManager.hpp"
+#include "Student.hpp"
 
 void printMenu() {
     std::cout << "\n=== Öğrenci Bilgi Sistemi ===" << std::endl;
