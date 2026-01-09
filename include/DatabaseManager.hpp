@@ -2,11 +2,29 @@
 #define DATABASE_MANAGER_H
 
 #include <vector>
+#include <string>
 #include "Student.hpp"
+#include <pqxx/pqxx>
 
 class DatabaseManager {
+private:
+    pqxx::connection* connection;
+    std::string connectionString;
+    
+    std::string buildConnectionString();
+    void initializeConnection();
+
 public:
     DatabaseManager();
+    ~DatabaseManager();
+    
+    // Copy constructor ve assignment operator'ı devre dışı bırak
+    DatabaseManager(const DatabaseManager&) = delete;
+    DatabaseManager& operator=(const DatabaseManager&) = delete;
+    
+    // Move constructor ve move assignment
+    DatabaseManager(DatabaseManager&&) noexcept;
+    DatabaseManager& operator=(DatabaseManager&&) noexcept;
 
     bool isConnected() const;
 
