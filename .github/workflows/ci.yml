@@ -9,7 +9,7 @@ on:
 jobs:
   cpp-build:
     name: C++ Build (CMake)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout
@@ -33,7 +33,7 @@ jobs:
 
   docker-build:
     name: Docker Build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: cpp-build
 
     steps:
