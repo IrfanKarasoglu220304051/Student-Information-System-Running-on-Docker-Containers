@@ -7,16 +7,10 @@ project(OgrenciBilgiSistemi VERSION 1.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# PostgreSQL
-find_package(PostgreSQL REQUIRED)
-
-# libpqxx (Portable): pkg-config ile bul
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(LIBPQXX REQUIRED libpqxx)
-
-# include ve lib pathleri
-include_directories(${LIBPQXX_INCLUDE_DIRS})
-link_directories(${LIBPQXX_LIBRARY_DIRS})
+# Bağımlılıkları Bul (libpqxx ve PostgreSQL - Opsiyonel)
+# Not: Docker imajında bu paketlerin yüklü olması gerekir.
+find_package(PostgreSQL QUIET)
+find_package(libpqxx QUIET)
 
 # Header dosyalarının yerini belirt (include/ klasörü)
 include_directories(include)
@@ -30,24 +24,30 @@ set(SOURCES
 # Executable
 add_executable(OBS_App ${SOURCES})
 
-# Link
-target_link_libraries(OBS_App PRIVATE ${LIBPQXX_LIBRARIES} PostgreSQL::PostgreSQL)
+# Kütüphaneleri Projeye Bağla (Linkle - Opsiyonel)
+if(PostgreSQL_FOUND AND libpqxx_FOUND)
+    target_link_libraries(OBS_App PRIVATE pqxx::pqxx PostgreSQL::PostgreSQL)
+endif()
 
 # --- TEST BÖLÜMÜ ---
 enable_testing()
 
 find_package(GTest QUIET)
 if(GTest_FOUND)
-    add_executable(UnitTests tests/test_db.cpp src/DatabaseManager.cpp)
-
-    # UnitTests için de aynı libpqxx link
-    target_link_libraries(UnitTests PRIVATE
-        GTest::GTest
-        GTest::Main
-        ${LIBPQXX_LIBRARIES}
-        PostgreSQL::PostgreSQL
+    # Unit Tests - Student testleri
+    add_executable(UnitTests_Student test/test_student.cpp)
+    target_link_libraries(UnitTests_Student PRIVATE GTest::GTest GTest::Main)
+    add_test(NAME StudentTests COMMAND UnitTests_Student)
+    
+    # Integration Tests - DatabaseManager testleri
+    add_executable(UnitTests_Database test/test_database.cpp src/DatabaseManager.cpp)
+    target_link_libraries(UnitTests_Database PRIVATE GTest::GTest GTest::Main)
+    add_test(NAME DatabaseTests COMMAND UnitTests_Database)
+    
+    # Tüm testleri çalıştırmak için
+    add_custom_target(run_all_tests
+        COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
+        DEPENDS UnitTests_Student UnitTests_Database
+        COMMENT "Running all tests"
     )
-
-    add_test(NAME AllTests COMMAND UnitTests)
 endif()
-
