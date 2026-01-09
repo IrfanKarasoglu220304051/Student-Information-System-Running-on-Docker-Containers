@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Install build dependencies
@@ -23,14 +23,13 @@ jobs:
             g++ \
             make \
             libpq-dev \
-            libpqxx-dev
+            libpqxx-dev \
+            pkg-config
 
-      - name: Configure
-        run: |
-          cmake -S . -B build \
-            -Dlibpqxx_DIR=/usr/lib/x86_64-linux-gnu/cmake/libpqxx
+      - name: Configure project
+        run: cmake -S . -B build
 
-      - name: Build
+      - name: Build project
         run: cmake --build build -j
 
   docker-build:
@@ -39,15 +38,15 @@ jobs:
     needs: cpp-build
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build app image (Dockerfile)
+      - name: Build application image
         run: docker build -t sis-app:ci -f Dockerfile .
 
-      - name: Build db image (Dockerfile.db)
+      - name: Build database image
         run: docker build -t sis-db:ci -f Dockerfile.db .
 
