@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/UnitTests_Database.dir/test_database.cpp.o CMakeFiles/UnitTests_Database.dir/src/DatabaseManager.cpp.o -o UnitTests_Database  /usr/lib/x86_64-linux-gnu/libgtest.a 

@@ -1,0 +1,78 @@
+Start testing: Jan 09 18:33 +03
+----------------------------------------------------------
+1/2 Testing: StudentTests
+1/2 Test: StudentTests
+Command: "/home/veysel/Desktop/system_programming/Student-Information-System-Running-on-Docker-Containers/test/UnitTests_Student"
+Directory: /home/veysel/Desktop/system_programming/Student-Information-System-Running-on-Docker-Containers/test
+"StudentTests" start time: Jan 09 18:33 +03
+Output:
+----------------------------------------------------------
+[==========] Running 6 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 6 tests from StudentTest
+[ RUN      ] StudentTest.DefaultInitialization_InitializesCorrectly
+[       OK ] StudentTest.DefaultInitialization_InitializesCorrectly (0 ms)
+[ RUN      ] StudentTest.FieldAssignment_SetsAllFields
+[       OK ] StudentTest.FieldAssignment_SetsAllFields (0 ms)
+[ RUN      ] StudentTest.InitializationWithValues_SetsCorrectly
+[       OK ] StudentTest.InitializationWithValues_SetsCorrectly (0 ms)
+[ RUN      ] StudentTest.MinimumValues_HandlesCorrectly
+[       OK ] StudentTest.MinimumValues_HandlesCorrectly (0 ms)
+[ RUN      ] StudentTest.MaximumGPA_HandlesCorrectly
+[       OK ] StudentTest.MaximumGPA_HandlesCorrectly (0 ms)
+[ RUN      ] StudentTest.EmptyFields_HandlesCorrectly
+[       OK ] StudentTest.EmptyFields_HandlesCorrectly (0 ms)
+[----------] 6 tests from StudentTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 6 tests from 1 test suite ran. (0 ms total)
+[  PASSED  ] 6 tests.
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"StudentTests" end time: Jan 09 18:33 +03
+"StudentTests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/2 Testing: DatabaseTests
+2/2 Test: DatabaseTests
+Command: "/home/veysel/Desktop/system_programming/Student-Information-System-Running-on-Docker-Containers/test/UnitTests_Database"
+Directory: /home/veysel/Desktop/system_programming/Student-Information-System-Running-on-Docker-Containers/test
+"DatabaseTests" start time: Jan 09 18:33 +03
+Output:
+----------------------------------------------------------
+[==========] Running 8 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 8 tests from DatabaseTest
+[ RUN      ] DatabaseTest.IsConnected_ReturnsTrue
+[       OK ] DatabaseTest.IsConnected_ReturnsTrue (0 ms)
+[ RUN      ] DatabaseTest.InsertStudent_DoesNotCrash
+Student inserted
+[       OK ] DatabaseTest.InsertStudent_DoesNotCrash (0 ms)
+[ RUN      ] DatabaseTest.GetAllStudents_ReturnsEmptyVector
+[       OK ] DatabaseTest.GetAllStudents_ReturnsEmptyVector (0 ms)
+[ RUN      ] DatabaseTest.GetStudentById_ReturnsEmptyStudent
+[       OK ] DatabaseTest.GetStudentById_ReturnsEmptyStudent (0 ms)
+[ RUN      ] DatabaseTest.GetStudentByNumber_ReturnsEmptyStudent
+[       OK ] DatabaseTest.GetStudentByNumber_ReturnsEmptyStudent (0 ms)
+[ RUN      ] DatabaseTest.DeleteStudent_DoesNotCrash
+[       OK ] DatabaseTest.DeleteStudent_DoesNotCrash (0 ms)
+[ RUN      ] DatabaseTest.UpdateStudentGrade_DoesNotCrash
+[       OK ] DatabaseTest.UpdateStudentGrade_DoesNotCrash (0 ms)
+[ RUN      ] DatabaseTest.CalculateGPA_ReturnsZero
+[       OK ] DatabaseTest.CalculateGPA_ReturnsZero (0 ms)
+[----------] 8 tests from DatabaseTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 8 tests from 1 test suite ran. (0 ms total)
+[  PASSED  ] 8 tests.
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"DatabaseTests" end time: Jan 09 18:33 +03
+"DatabaseTests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Jan 09 18:33 +03
