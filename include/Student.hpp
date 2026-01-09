@@ -3,28 +3,12 @@
 
 #include <string>
 
-class Student {
-public:
+struct Student {
     int id;
     std::string studentNumber;
-    std::string firstName;
-    std::string lastName;
-    std::string email;
-
-    // Default Constructor
-    Student() : id(0) {}
-    
-    // Parametreli Constructor
-    Student(int id, std::string sNum, std::string fName, std::string lName, std::string mail);
-
-    // Getter Metotları
-    int getId() const { return id; }
-    std::string getFullName() const { return firstName + " " + lastName; }
-    std::string getEmail() const { return email; }
-    std::string getStudentNumber() const { return studentNumber; }
-
-    // Setter Metotları
-    void setEmail(const std::string& newEmail) { email = newEmail; }
+    std::string name;
+    std::string surname;
+    double gpa;
 };
 
-#endif
+#endif // STUDENT_HPP
