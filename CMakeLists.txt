@@ -19,6 +19,7 @@ include_directories(include)
 set(SOURCES
     src/main.cpp
     src/DatabaseManager.cpp
+    src/Student.cpp
 )
 
 # Executable
