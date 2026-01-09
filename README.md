@@ -1,80 +1,202 @@
 # Student Information System
 
-Docker + C++ + PostgreSQL based system.
+A Docker-based C++ + PostgreSQL Student Information System developed as a System Programming course project.
 
-## Branching
-- main: stable
-- develop: development
-- feature/*: features
+---
+
+## Project Purpose
+
+This project aims to demonstrate:
+
+- C++ application development with a clean structure
+- PostgreSQL database integration using libpqxx
+- Containerized development using Docker and Docker Compose
+- Team-based workflow using GitHub Flow
+- Continuous Integration using GitHub Actions
+- Clear documentation with week-based progress tracking
+
+---
+
+## Architecture Overview
+
+The system consists of three main components:
+
+### 1. C++ Application
+- Implements all business logic
+- Provides full CRUD operations
+- Connects to PostgreSQL using libpqxx
+- Built using CMake
+- Runs inside a Docker container
+
+### 2. PostgreSQL Database
+- Stores student, course, and enrollment data
+- Automatically initialized using schema.sql
+- Runs in a separate Docker container
+- Uses a persistent Docker volume
+
+### 3. Docker Compose
+- Orchestrates application and database containers
+- Provides isolated networking
+- Manages environment variables
+- Ensures reproducible setup across systems
+
+---
+
+## Repository Structure
+
+.
+├── .github/workflows/ci.yml
+├── include/
+├── src/
+├── test/
+├── docs/
+├── Dockerfile
+├── Dockerfile.db
+├── docker-compose.yml
+├── CMakeLists.txt
+├── schema.sql
+├── sample_data.sql
+├── .env.example
+└── README.md
+
+---
+
+## Environment Variables
+
+The application uses the following environment variables:
+
+- DB_HOST (default: db)
+- DB_PORT (default: 5432)
+- DB_NAME (default: studentdb)
+- DB_USER
+- DB_PASSWORD
+
+An example configuration is provided in .env.example.
+
+---
+
+## How to Run the Project
+
+### Requirements
+- Docker
+- Docker Compose (v2 recommended)
+
+### Recommended First-Time Setup
+
+docker compose down -v
+docker compose up -d --build
+
+This ensures:
+- Containers are rebuilt
+- Database schema is applied
+- Volumes are initialized cleanly
+
+---
+
+## Validation & Smoke Test
+
+### Check running containers
+docker compose ps
+
+### Check application logs
+docker compose logs --tail=200 app
+
+### Verify database tables
+docker exec -it postgres_db psql -U student -d studentdb -c "\dt"
+
+Smoke Test Result:
+- Application starts without crashing
+- PostgreSQL connection is successfully established
+- Verified manually using Docker Compose
+
+---
+
+## Continuous Integration (CI)
+
+CI is implemented using GitHub Actions.
+
+### CI Capabilities
+- Runs on pull requests to develop
+- Builds the C++ application using CMake
+- Verifies Docker images build successfully
+
+Workflow location:
+.github/workflows/ci.yml
+
+---
+
+## Branching Strategy
+
+- main → Stable
+- develop → Active development
+- feature/* → Feature branches
+- backup/* → Backup branches
+
+All changes are merged into develop via Pull Requests.
+
+---
+
+## Weekly Progress
+
+### Week 1 – Project Setup
+- Repository initialized
+- Branching strategy defined
+- Docker Compose skeleton created
+- .env.example added
+- Initial documentation prepared
+
+### Week 2 – Build & Dockerization
+- CMake build system configured
+- Dockerfile for C++ application created
+- PostgreSQL Dockerfile created
+- docker-compose.yml finalized
+- Application built successfully inside container
+
+### Week 3 – Database & Application Logic
+- PostgreSQL schema designed
+- Automatic database initialization implemented
+- libpqxx integration completed
+- Full CRUD operations implemented
+- Input validation and error handling added
+
+### Week 4 – CI, Testing & Finalization
+- GitHub Actions CI workflow added
+- C++ build verified in CI
+- Docker build verified in CI
+- Smoke tests executed and documented
+- README reviewed and finalized
+- Minor code cleanup and consistency improvements applied
+
+---
+
+## Current Project Status
+
+- Core functionality completed
+- CI pipeline active and passing
+- Docker setup stable
+- Documentation finalized
+- Ready for submission
+
+---
+
+## Known Limitations
+
+- CLI-based interface only
+- No authentication or authorization
+- No advanced automated test coverage
+
+---
 
 ## Team
-- İrfan Karaşoğlu: Project Manager
-- Veysel Özaslan: Docker & DevOps
-- Berkay Erdoğan: C++ Developer
 
-## Veritabanı Kurulumu (Database Initialization)
+- İrfan Karaşoğlu – Project Manager
+- Veysel Özaslan – Docker & DevOps
+- Berkay Erdoğan – C++ Developer
 
-### Ön Gereksinimler
-- Docker ve Docker Compose (v1 veya v2) yüklü olmalı
-- `docker-compose.yml` içindeki `db` servisi Postgres çalıştıracak şekilde yapılandırılmış olmalı
+---
 
-### Otomatik Uygulama (yeni kurulum / önerilen)
-Bu repo `schema.sql` dosyasını `db` servisine mount edecek şekilde ayarlanmıştır; init script sadece veritabanı **ilk kez** oluşturulurken çalışır.
+## Final Notes
 
-1. Varolan container ve volume'leri kaldır (böylece init script çalışacaktır):
-   ```bash
-   # Docker Compose v2
-   docker compose down -v
+All project requirements have been implemented.
+The project follows best practices for containerization, CI, and collaborative development.
 
-   # Eğer sisteminizde v1 yüklüyse
-   # docker-compose down -v
-   ```
-
-2. Container'ları yeniden başlatın:
-   ```bash
-   docker compose up -d
-   # veya docker-compose up -d
-   ```
-
-> Not: `docker-entrypoint-initdb.d/schema.sql` içeriği yalnızca volume boşken çalıştırılır; eğer daha önce oluşturulmuş bir volume varsa `down -v` ile silinmelidir.
-
-### Manuel Uygulama (mevcut veritabanı için)
-Eğer volume'ü silmek istemiyorsanız veya schema'yı elle uygulamak istiyorsanız:
-```bash
-# Dockerfile.db'de ayarlı POSTGRES_USER/POSTGRES_DB değerlerini kontrol edin (örnek: student / studentdb)
-docker exec -i postgres_db psql -U student -d studentdb < schema.sql
-```
-
-### Doğrulama
-- Container loglarını kontrol edin:
-  ```bash
-  docker logs postgres_db --tail 200
-  ```
-- Veritabanındaki tabloları listeleyin:
-  ```bash
-  docker exec -i postgres_db psql -U student -d studentdb -c "\dt"
-  ```
-
-### Ortam Değişkenleri
-- `DB_HOST` (varsayılan: `db`), `DB_PORT` (varsayılan: `5432`), `DB_NAME` (varsayılan: `studentdb`), `DB_USER`, `DB_PASSWORD`
-- Ayarlar `docker-compose.yml` veya `Dockerfile.db` içinde kontrol edilebilir.
-
-### Schema Yapısı
-
-- **students**: Öğrenci bilgileri (id, student_number, first_name, last_name, email)
-- **courses**: Ders bilgileri (id, course_code, course_name, credits)
-- **enrollments**: Öğrenci-ders kayıtları ve notlar (student_id, course_id, grade)
-
-Detaylı şema tanımı için `schema.sql` dosyasına bakın.
-
-## Kullanım
-
-Uygulama çalıştırıldığında interaktif bir menü sunar:
-- 1) Yeni Öğrenci Ekle
-- 2) Öğrenci Listele
-- 3) Öğrenci Ara (ID ile)
-- 4) Öğrenci Ara (Numara ile)
-- 5) Öğrenci Sil
-- 6) Not Güncelle
-- 7) GPA Hesapla
-- 0) Çıkış
