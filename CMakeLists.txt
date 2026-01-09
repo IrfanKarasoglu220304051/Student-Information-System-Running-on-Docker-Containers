@@ -34,14 +34,18 @@ enable_testing()
 
 find_package(GTest QUIET)
 if(GTest_FOUND)
+    message(STATUS "GoogleTest bulundu - Testler etkinleştirildi")
+    
     # Unit Tests - Student testleri
     add_executable(UnitTests_Student test/test_student.cpp)
-    target_link_libraries(UnitTests_Student PRIVATE GTest::GTest GTest::Main)
+    target_link_libraries(UnitTests_Student PRIVATE GTest::GTest)
+    target_include_directories(UnitTests_Student PRIVATE ${CMAKE_SOURCE_DIR}/include)
     add_test(NAME StudentTests COMMAND UnitTests_Student)
     
     # Integration Tests - DatabaseManager testleri
     add_executable(UnitTests_Database test/test_database.cpp src/DatabaseManager.cpp)
-    target_link_libraries(UnitTests_Database PRIVATE GTest::GTest GTest::Main)
+    target_link_libraries(UnitTests_Database PRIVATE GTest::GTest)
+    target_include_directories(UnitTests_Database PRIVATE ${CMAKE_SOURCE_DIR}/include)
     add_test(NAME DatabaseTests COMMAND UnitTests_Database)
     
     # Tüm testleri çalıştırmak için
@@ -50,4 +54,7 @@ if(GTest_FOUND)
         DEPENDS UnitTests_Student UnitTests_Database
         COMMENT "Running all tests"
     )
+else()
+    message(WARNING "GoogleTest bulunamadı - Testler devre dışı. Testleri çalıştırmak için GoogleTest kurun.")
+    message(STATUS "GoogleTest kurulumu için: vcpkg install gtest veya apt-get install libgtest-dev")
 endif()
