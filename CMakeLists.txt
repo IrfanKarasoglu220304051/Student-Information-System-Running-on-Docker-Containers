@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 # Proje Adı ve Versiyonu
 project(OgrenciBilgiSistemi VERSION 1.0 LANGUAGES CXX)
 
-# C++ Standartı (Modern C++ özellikleri için 17 idealdir)
+# C++ Standardı
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -21,7 +21,7 @@ set(SOURCES
     src/DatabaseManager.cpp
 )
 
-# Çalıştırılabilir Dosyayı Oluştur (Executable)
+# Executable
 add_executable(OBS_App ${SOURCES})
 
 # Kütüphaneleri Projeye Bağla (Linkle - Opsiyonel)
@@ -29,10 +29,9 @@ if(PostgreSQL_FOUND AND libpqxx_FOUND)
     target_link_libraries(OBS_App PRIVATE pqxx::pqxx PostgreSQL::PostgreSQL)
 endif()
 
-# --- TEST BÖLÜMÜ (Görev Dökümanındaki Unit Test Gereksinimi İçin) ---
+# --- TEST BÖLÜMÜ ---
 enable_testing()
 
-# GoogleTest paketini bul (Eğer yüklüyse)
 find_package(GTest QUIET)
 if(GTest_FOUND)
     # Unit Tests - Student testleri
