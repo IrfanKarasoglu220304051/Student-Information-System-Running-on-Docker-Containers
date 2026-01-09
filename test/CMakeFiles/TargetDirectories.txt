@@ -1,0 +1,7 @@
+/home/veysel/Desktop/system_programming/Student-Information-System-Running-on-Docker-Containers/test/CMakeFiles/OBS_App.dir
+/home/veysel/Desktop/system_programming/Student-Information-System-Running-on-Docker-Containers/test/CMakeFiles/UnitTests_Student.dir
+/home/veysel/Desktop/system_programming/Student-Information-System-Running-on-Docker-Containers/test/CMakeFiles/UnitTests_Database.dir
+/home/veysel/Desktop/system_programming/Student-Information-System-Running-on-Docker-Containers/test/CMakeFiles/run_all_tests.dir
+/home/veysel/Desktop/system_programming/Student-Information-System-Running-on-Docker-Containers/test/CMakeFiles/test.dir
+/home/veysel/Desktop/system_programming/Student-Information-System-Running-on-Docker-Containers/test/CMakeFiles/edit_cache.dir
+/home/veysel/Desktop/system_programming/Student-Information-System-Running-on-Docker-Containers/test/CMakeFiles/rebuild_cache.dir

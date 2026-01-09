@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/UnitTests_Student.dir/test_student.cpp.o -o UnitTests_Student  /usr/lib/x86_64-linux-gnu/libgtest.a 

@@ -9,6 +9,11 @@ struct Student {
     std::string name;
     std::string surname;
     double gpa;
+    
+    // Yardımcı metodlar
+    std::string getFullName() const;
+    bool isValid() const;
+    std::string toString() const;
 };
 
 #endif // STUDENT_HPP
