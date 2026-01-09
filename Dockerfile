@@ -9,6 +9,9 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 COPY . .
 
-RUN mkdir -p build && cd build && cmake .. && make
+
+RUN g++ main.cpp -o app
+
+
 
 CMD ["./build/app"]
