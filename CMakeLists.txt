@@ -3,14 +3,14 @@ cmake_minimum_required(VERSION 3.10)
 # Proje Adı ve Versiyonu
 project(OgrenciBilgiSistemi VERSION 1.0 LANGUAGES CXX)
 
-# C++ Standartı (Modern C++ özellikleri için 17 idealdir)
+# C++ Standardı
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Bağımlılıkları Bul (libpqxx ve PostgreSQL)
+# Bağımlılıkları Bul (libpqxx ve PostgreSQL - Opsiyonel)
 # Not: Docker imajında bu paketlerin yüklü olması gerekir.
-find_package(PostgreSQL REQUIRED)
-find_package(libpqxx REQUIRED)
+find_package(PostgreSQL QUIET)
+find_package(libpqxx QUIET)
 
 # Header dosyalarının yerini belirt (include/ klasörü)
 include_directories(include)
@@ -21,19 +21,40 @@ set(SOURCES
     src/DatabaseManager.cpp
 )
 
-# Çalıştırılabilir Dosyayı Oluştur (Executable)
+# Executable
 add_executable(OBS_App ${SOURCES})
 
-# Kütüphaneleri Projeye Bağla (Linkle)
-target_link_libraries(OBS_App PRIVATE pqxx::pqxx PostgreSQL::PostgreSQL)
+# Kütüphaneleri Projeye Bağla (Linkle - Opsiyonel)
+if(PostgreSQL_FOUND AND libpqxx_FOUND)
+    target_link_libraries(OBS_App PRIVATE pqxx::pqxx PostgreSQL::PostgreSQL)
+endif()
 
-# --- TEST BÖLÜMÜ (Görev Dökümanındaki Unit Test Gereksinimi İçin) ---
+# --- TEST BÖLÜMÜ ---
 enable_testing()
 
-# GoogleTest paketini bul (Eğer yüklüyse)
 find_package(GTest QUIET)
 if(GTest_FOUND)
-    add_executable(UnitTests tests/test_db.cpp src/DatabaseManager.cpp)
-    target_link_libraries(UnitTests PRIVATE GTest::GTest GTest::Main pqxx::pqxx)
-    add_test(NAME AllTests COMMAND UnitTests)
+    message(STATUS "GoogleTest bulundu - Testler etkinleştirildi")
+    
+    # Unit Tests - Student testleri
+    add_executable(UnitTests_Student test/test_student.cpp)
+    target_link_libraries(UnitTests_Student PRIVATE GTest::GTest)
+    target_include_directories(UnitTests_Student PRIVATE ${CMAKE_SOURCE_DIR}/include)
+    add_test(NAME StudentTests COMMAND UnitTests_Student)
+    
+    # Integration Tests - DatabaseManager testleri
+    add_executable(UnitTests_Database test/test_database.cpp src/DatabaseManager.cpp)
+    target_link_libraries(UnitTests_Database PRIVATE GTest::GTest)
+    target_include_directories(UnitTests_Database PRIVATE ${CMAKE_SOURCE_DIR}/include)
+    add_test(NAME DatabaseTests COMMAND UnitTests_Database)
+    
+    # Tüm testleri çalıştırmak için
+    add_custom_target(run_all_tests
+        COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure
+        DEPENDS UnitTests_Student UnitTests_Database
+        COMMENT "Running all tests"
+    )
+else()
+    message(WARNING "GoogleTest bulunamadı - Testler devre dışı. Testleri çalıştırmak için GoogleTest kurun.")
+    message(STATUS "GoogleTest kurulumu için: vcpkg install gtest veya apt-get install libgtest-dev")
 endif()
