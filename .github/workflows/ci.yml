@@ -18,7 +18,12 @@ jobs:
       - name: Install build dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake g++ make
+          sudo apt-get install -y \
+            cmake \
+            g++ \
+            make \
+            libpq-dev \
+            libpqxx-dev
 
       - name: Configure
         run: cmake -S . -B build
@@ -43,3 +48,4 @@ jobs:
 
       - name: Build db image (Dockerfile.db)
         run: docker build -t sis-db:ci -f Dockerfile.db .
+
